@@ -1,9 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { createLogger } from 'redux-logger';
+import thunkMiddleware from 'redux-thunk';
 import './index.css';
 import App from './containers/App';
 import reportWebVitals from './reportWebVitals';
 import 'tachyons';
+import { searchRobots, requestRobots } from './reducers';
 
 // ReactDOM.render(
 //   <React.StrictMode>
@@ -11,9 +16,14 @@ import 'tachyons';
 //   </React.StrictMode>,
 //   document.getElementById('root')
 // );
+const logger = createLogger();
+const rootReducer = combineReducers({ searchRobots, requestRobots });
+const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, logger));
 
 ReactDOM.render(
-  <App />
+  <Provider store={store}>
+    <App />
+  </Provider>
 , document.getElementById('root'));
 
 // If you want to start measuring performance in your app, pass a function
